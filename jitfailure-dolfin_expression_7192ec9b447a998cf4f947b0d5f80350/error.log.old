@@ -1,0 +1,7 @@
+/var/folders/y5/x5kdb15n1wv52byn2g3dkw080000gn/T/tmpf5mo6qnh/dolfin_expression_7192ec9b447a998cf4f947b0d5f80350.cpp:64:23: error: use of undeclared identifier 'materials'
+          values[0] = materials[cell.index()] == 1 ? E1 / (2*(1 + nu)) : E2 / (2*(1 + nu));
+                      ^
+/var/folders/y5/x5kdb15n1wv52byn2g3dkw080000gn/T/tmpf5mo6qnh/dolfin_expression_7192ec9b447a998cf4f947b0d5f80350.cpp:64:33: error: use of undeclared identifier 'cell'
+          values[0] = materials[cell.index()] == 1 ? E1 / (2*(1 + nu)) : E2 / (2*(1 + nu));
+                                ^
+2 errors generated.
