@@ -30,7 +30,7 @@ top2(logic_geo2) =1;
 % combine
 im = top1+top2;
 
-% figure; im = im+1; imagesc(im), axis equal  off, colormap("parula");
+figure; im = im+1; imagesc(im), axis equal  off, colormap("parula");
 
 
 
@@ -59,8 +59,9 @@ verty_max = max(vert(:,2));
 vert(:,1) = vert(:,1) -vertx_min;
 vert(:,2) = vert(:,2) -verty_min;
 xmlFileName = ['./','test','.xml'];
-% gnegate_xml_mesh(xmlFileName,vert,tria)
-generate_xml_mesh_with_materials(xmlFileName,vert,tria,tnum)
+gnegate_xml_mesh(xmlFileName,vert,tria)
+% generate_xml_mesh_with_materials(xmlFileName,vert,tria,tnum-1)
+generate_materials_xml('./mesh.xml',tnum-1,length(tnum))
 
 %% save as xml file
 
@@ -187,6 +188,36 @@ function generate_xml_mesh_with_materials(xmlFileName, vertices, elements, mater
         elementNode.setAttribute('v2', num2str(elements(i, 3)-1));
         elementNode.setAttribute('material', num2str(materials(i))); % Add material ID
         elementsNode.appendChild(elementNode);
+    end
+
+    % Write the XML document to a file
+    xmlwrite(xmlFileName, docNode);
+end
+
+
+function generate_materials_xml(xmlFileName, materials, numCells)
+    %% Generate XML file for material IDs in FEniCS format
+
+    % Create the XML document object
+    docNode = com.mathworks.xml.XMLUtils.createDocument('dolfin');
+    rootNode = docNode.getDocumentElement();
+
+    % Create the mesh_function element and add it to the document
+    meshFunctionNode = docNode.createElement('mesh_function');
+    meshValueCollectionNode = docNode.createElement('mesh_value_collection');
+    meshValueCollectionNode.setAttribute('type', 'uint');
+    meshValueCollectionNode.setAttribute('dim', '2'); % Assuming 2D mesh
+    meshValueCollectionNode.setAttribute('size', num2str(numCells));
+    meshFunctionNode.appendChild(meshValueCollectionNode);
+    rootNode.appendChild(meshFunctionNode);
+
+    % Add material IDs to the mesh_value_collection
+    for i = 1:numCells
+        valueNode = docNode.createElement('value');
+        valueNode.setAttribute('cell_index', num2str(i-1)); % Zero-based indexing for FEniCS
+        valueNode.setAttribute('local_entity', '0');
+        valueNode.setAttribute('value', num2str(materials(i)));
+        meshValueCollectionNode.appendChild(valueNode);
     end
 
     % Write the XML document to a file
