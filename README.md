@@ -18,6 +18,30 @@ Fenics is primary developed for linux and macos, for win, insall use docer
 4. lauch jupyter notebook:  http://127.0.0.1:8888/?token=your_token
 
 
+# Arc length solution for D-F
+[arc legnth solution](https://github.com/pprachas/fenics_arclength)
+
+
+
+# FEniCs math 
+
+## linear problem
+
+
+$\text{Find } \boldsymbol{u}\in V \text{ s.t. } \int_{\Omega}
+\boldsymbol{\sigma}(\boldsymbol{u}):\boldsymbol{\varepsilon}(\boldsymbol{v}) d\Omega
+= \int_{\Omega} \boldsymbol{f}\cdot\boldsymbol{v}  d\Omega \quad \forall\boldsymbol{v} \in V
+$
+```
+V = VectorFunctionSpace(mesh, "Lagrange", 1)
+u = TrialFunction(V)
+v = TestFunction(V)
+lsh = dot(inner(sigma(du), eps(u_))*dx)
+rsh = dot(f,u)*dx
+```
+
+
+
 
 
 
