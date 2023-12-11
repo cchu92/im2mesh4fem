@@ -36,12 +36,28 @@ $
 V = VectorFunctionSpace(mesh, "Lagrange", 1)
 u = TrialFunction(V)
 v = TestFunction(V)
-lsh = dot(inner(sigma(du), eps(u_))*dx)
+lsh = dot(inner(sigma(u), eps(v))*dx)
 rsh = dot(f,u)*dx
 ```
 
 
 
+## weak coupled thmermomechancial problem
+
+\begin{equation}
+\boldsymbol{\sigma} = \mathbb{C}:(\boldsymbol{\varepsilon}-\alpha(T-T_0)\boldsymbol{1}) = \lambda\text{tr}(\boldsymbol{\varepsilon})\boldsymbol{1}+2\mu\boldsymbol{\varepsilon} -\alpha(3\lambda+2\mu)(T-T_0)\boldsymbol{1}
+\end{equation}
 
 
+```
+V = VectorFunctionSpace(mesh, 'CG', 2)
+u = TrialFunction(V)
+v = TestFunction(V)
+Wint = inner(sigma(u, Delta_T), eps(v))*dx
+aM = lhs(Wint)
+LM = rhs(Wint) + inner(f, v)*dx
+bcu = DirichletBC(V, Constant((0., 0.)), lateral_sides)
+u = Function(V, name="Displacement")
+solve(aM == LM, u, bcu)
+```
 
